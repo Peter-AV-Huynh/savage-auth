@@ -52,3 +52,8 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);
+
+//like buttons don't work
+//can send a message under any email address
+//unlinking deletes account. connect local is trash
+//password is displayed

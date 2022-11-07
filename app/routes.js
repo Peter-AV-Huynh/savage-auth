@@ -1,4 +1,5 @@
 module.exports = function(app, passport, db) {
+  const ObjectId = require('mongodb').ObjectId
 
 // normal routes ===============================================================
 
@@ -9,12 +10,14 @@ module.exports = function(app, passport, db) {
 
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) {
+
         db.collection('messages').find().toArray((err, result) => {
           if (err) return console.log(err)
           res.render('profile.ejs', {
             user : req.user,
             messages: result
           })
+          console.log(result)
         })
     });
 
@@ -36,9 +39,10 @@ module.exports = function(app, passport, db) {
 
     app.put('/messages', (req, res) => {
       db.collection('messages')
-      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
-        $set: {
-          thumbUp:req.body.thumbUp + 1
+      .findOneAndUpdate({_id: new ObjectId(req.body.id)}, {
+        $inc: {
+          thumbUp:req.body.isThumbUp ? 1 : 0,
+          thumbDown:req.body.isThumbUp ? 0 : 1
         }
       }, {
         sort: {_id: -1},
